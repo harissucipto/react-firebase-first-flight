@@ -36,7 +36,7 @@ class App extends Component {
     database
       .ref()
       .child('AMAZINGNEWDATA')
-      .set(this.state.newData);
+      .push(this.state.newData);
   }
 
   render() {
