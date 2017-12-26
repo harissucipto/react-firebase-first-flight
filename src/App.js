@@ -7,16 +7,36 @@ class App extends Component {
     super(props);
 
     this.state = {
-      data: null
+      data: null,
+      newData: ''
     };
+
+    this.handleChange = this.handleChange.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
     database.ref('/').on('value', snapshot => {
       this.setState({
-        data: snapshot.val()
+        data: snapshot.val(),
+        newData: ''
       });
     });
+  }
+
+  handleChange(event) {
+    const newData = event.target.value;
+    this.setState({
+      newData
+    });
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    database
+      .ref()
+      .child('AMAZINGNEWDATA')
+      .set(this.state.newData);
   }
 
   render() {
@@ -28,6 +48,14 @@ class App extends Component {
         <pre className="App--data">
           {JSON.stringify(this.state.data, null, 2)}
         </pre>
+        <form className="App--form" onSubmit={this.handleSubmit}>
+          <input
+            type="text"
+            value={this.state.newData}
+            onChange={this.handleChange}
+          />
+          <input type="submit" />
+        </form>
       </div>
     );
   }
